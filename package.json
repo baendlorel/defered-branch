@@ -1,32 +1,32 @@
 {
-	"name": "<name>",
-	"version": "0.0.1",
+	"name": "defered-branch",
+	"version": "1.0.0",
 	"author": {
 		"name": "Kasukabe Tsumugi",
 		"email": "futami16237@gmail.com"
 	},
-	"purpose": "<npm|app|vscode-extension|rollup-plugin>",
-	"description": "<name>",
-	"description_zh": "<name>",
+	"purpose": "npm",
+	"description": "Sometimes we need to judge something with multiple cases, but the main job should be done later. So we have Defered Branch!",
+	"description_zh": "有时候我们需要根据多个条件来判断某件事，但主要工作应该在之后完成。所以我们有了延迟分支！",
 	"type": "module",
-	"main": "./dist/index.cjs",
 	"module": "./dist/index.mjs",
 	"types": "./dist/index.d.ts",
 	"exports": {
 		"types": "./dist/index.d.ts",
 		"import": "./dist/index.mjs",
-		"require": "./dist/index.cjs",
 		"default": "./dist/index.mjs"
 	},
 	"files": [
 		"dist"
 	],
-	"homepage": "https://github.com/baendlorel/<name>#readme",
+	"homepage": "https://github.com/baendlorel/defered-branch#readme",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/baendlorel/<name>"
+		"url": "https://github.com/baendlorel/defered-branch"
 	},
 	"keywords": [
+		"branch",
+		"assert",
 		"typescript",
 		"javascript"
 	],

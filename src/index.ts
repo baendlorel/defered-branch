@@ -1,7 +1,56 @@
+class DeferBranch {
+  private branch: Fn | null = null;
+  private nomatchHandler: Fn | null = null;
+
+  /**
+   * Add a new entry
+   * - will **override** the previous matched branch
+   * @param condition the condition to match
+   * @param branch the branch to run when matched
+   * @returns this
+   */
+  add(condition: boolean, branch: Fn): DeferBranch {
+    if (typeof branch !== 'function') {
+      throw new TypeError('Branch must be a function');
+    }
+
+    if (condition) {
+      this.branch = branch;
+    }
+    return this;
+  }
+
+  /**
+   * When no branch matched, run this handler
+   * @param handler handle the exhausted case
+   * @returns this
+   */
+  nomatch(handler: Fn): DeferBranch {
+    if (typeof handler !== 'function') {
+      throw new TypeError('Branch must be a function');
+    }
+
+    this.nomatchHandler = handler;
+    return this;
+  }
+
+  /**
+   * If some branch matched, return its returnValue
+   * - if no branch matched, return the nomatch handler returnValue
+   * - if no branch matched and no nomatch handler, return undefined
+   */
+  run(): unknown {
+    if (this.branch) {
+      return this.branch();
+    }
+
+    if (this.nomatchHandler) {
+      return this.nomatchHandler();
+    }
+  }
+}
+
 /**
  * __PKG_INFO__
  */
-
-if (typeof __IS_DEV__ === 'undefined') {
-  Reflect.set(globalThis, '__IS_DEV__', true);
-}
+export const deferBranch = () => new DeferBranch();

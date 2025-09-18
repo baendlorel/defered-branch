@@ -1,1 +1,1 @@
-declare const __IS_DEV__: boolean;
+type Fn = (...args: unknown[]) => unknown;
