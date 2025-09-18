@@ -1,17 +1,17 @@
 # defered-branch 🚦
 
-A tiny TypeScript/JavaScript library for deferred branching logic.  
-Easily manage conditional execution and fallback handlers in a clean, chainable way!
+A tiny TypeScript/JavaScript utility for deferred branching logic.  
+It provides a small, chainable API to register conditional branches and two kinds of "no-match" handlers: one that runs immediately when no branch was matched, and another that runs later when you call `run()`.
 
 For more awesome packages, check out [my homepage💛](https://baendlorel.github.io/?repoType=npm)
 
-## Features ✨
+## Highlights ✨
 
-- Chainable API for adding branches
+- Chainable API for registering branches
 - Only the last matched branch is executed
-- Custom handler for unmatched cases
-- TypeScript support
-- Lightweight and dependency-free
+- Immediate `nomatch` handler (runs instantly when no branch matched)
+- Deferred `deferedNomatch` handler (runs when `run()` is invoked)
+- TypeScript declarations included
 
 ## Installation 📦
 
@@ -21,55 +21,89 @@ pnpm add defered-branch
 npm install defered-branch
 ```
 
-## Usage 🚀
+## Export / Import 🚀
+
+The package exports a factory named `deferedBranch` (note the spelling):
 
 ```ts
-import { deferBranch } from 'defered-branch';
+import { deferedBranch } from 'defered-branch';
+```
 
-const result = deferBranch()
-  .add(false, () => 'not this')
-  .add(true, () => 'this branch runs!')
-  .nomatch(() => 'no branch matched')
-  .run();
+## Basic Usage
 
-console.log(result); // 'this branch runs!'
+```ts
+import { deferedBranch } from 'defered-branch';
+
+// register branches - only the last matched branch will run
+const b = deferedBranch()
+  .add(false, () => 'A')
+  .add(true, () => 'B');
+
+console.log(b.run()); // 'B'
+```
+
+## nomatch vs deferedNomatch
+
+There are two ways to handle the case when no branch matches:
+
+- `nomatch(handler: Fn)` — runs the handler immediately if no branch has been matched yet. Note: if `nomatch` runs the handler immediately, later calls to `add(true, ...)` will not retroactively affect that call.
+- `deferedNomatch(handler: Fn)` — registers a handler that will be executed when `run()` is called and no branch matched.
+
+Examples:
+
+```ts
+import { deferedBranch } from 'defered-branch';
+
+// nomatch runs immediately when invoked if no branch matched
+deferedBranch()
+  .add(false, () => 'x')
+  .nomatch(() => console.log('immediate nomatch')) // prints now
+  .add(true, () => console.log('will not be printed')); // ignored for the already-called nomatch
+
+// deferedNomatch runs when run() is called
+const b2 = deferedBranch()
+  .add(false, () => 'x')
+  .deferedNomatch(() => 'deferred fallback');
+
+console.log(b2.run()); // 'deferred fallback'
 ```
 
 ## API Reference 📚
 
-### `deferBranch(): DeferBranch`
+All functions accept a `Fn` type: `type Fn = (...args: unknown[]) => unknown`.
 
-Creates a new branch handler.
+### `deferedBranch(): DeferBranch`
 
-### `add(condition: boolean, branch: () => any): this`
+Create a new `DeferBranch` instance.
 
-Adds a branch. If `condition` is true, this branch will be set as the one to run.  
-Multiple calls will override the previous matched branch.
+### `add(condition: boolean, branch: Fn): DeferBranch`
 
-### `nomatch(handler: () => any): this`
+Register a branch. If `condition` is true the provided `branch` becomes the current matched branch. Later `add(true, ...)` calls will override the matched branch.
 
-Sets a handler to run if no branch matches.
+Throws `TypeError` if `branch` is not a function.
 
-### `run(): any`
+### `nomatch(handler: Fn): DeferBranch`
 
-Executes the matched branch, or the nomatch handler if none matched.  
-Returns `undefined` if neither is set.
+If no branch has been matched when this is called, the `handler` is invoked immediately. This is useful for side-effects that should run right away when a branch is absent. Returns the instance for chaining. Throws `TypeError` when `handler` is not a function.
 
-## Example 🧩
+### `deferedNomatch(handler: Fn): DeferBranch`
 
-```ts
-const branch = deferBranch()
-  .add(false, () => 'A')
-  .add(false, () => 'B')
-  .nomatch(() => 'Fallback!');
+Register a handler to be executed by `run()` if no branch matched. Unlike `nomatch`, this does not run immediately — it defers execution until `run()`.
 
-console.log(branch.run()); // 'Fallback!'
-```
+### `run(): unknown`
+
+Execute the matched branch and return its value. If no branch matched but a `deferedNomatch` handler was set, returns the handler's return value. Returns `undefined` if neither exists.
+
+## Types & Distribution
+
+- Types are included (`"types": "./dist/index.d.ts"` in package.json).
+- The package entrypoint is an ESM module at `./dist/index.mjs`.
 
 ## Error Handling ⚠️
 
-- Throws `TypeError` if branch or nomatch handler is not a function.
+- `TypeError` is thrown if a non-function is passed as a branch or handler.
 
-## License 📄
+## Author & License
 
-MIT
+- Author: Kasukabe Tsumugi (<futami16237@gmail.com>)
+- License: MIT

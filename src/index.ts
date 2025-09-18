@@ -1,6 +1,6 @@
 class DeferBranch {
   private _branch: Fn | null = null;
-  private _nomatchHandler: Fn | null = null;
+  private _nomatch: Fn | null = null;
 
   /**
    * Add a new entry
@@ -22,6 +22,7 @@ class DeferBranch {
 
   /**
    * When no branch matched, run this handler
+   * - This will be called **instantly** and **ignores later matched branches**
    * @param handler handle the exhausted case
    * @returns this
    */
@@ -30,7 +31,26 @@ class DeferBranch {
       throw new TypeError('Branch must be a function');
     }
 
-    this._nomatchHandler = handler;
+    if (!this._branch) {
+      handler();
+    }
+
+    return this;
+  }
+
+  /**
+   * When no branch matched, run this handler
+   * - Will be called when `run()` is called
+   * @param handler handle the exhausted case
+   * @returns this
+   */
+  deferedNomatch(handler: Fn): DeferBranch {
+    if (typeof handler !== 'function') {
+      throw new TypeError('Branch must be a function');
+    }
+
+    this._nomatch = handler;
+
     return this;
   }
 
@@ -44,8 +64,8 @@ class DeferBranch {
       return this._branch();
     }
 
-    if (this._nomatchHandler) {
-      return this._nomatchHandler();
+    if (this._nomatch) {
+      return this._nomatch();
     }
   }
 }
