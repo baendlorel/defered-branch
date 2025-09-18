@@ -1,6 +1,6 @@
 class DeferBranch {
-  private branch: Fn | null = null;
-  private nomatchHandler: Fn | null = null;
+  private _branch: Fn | null = null;
+  private _nomatchHandler: Fn | null = null;
 
   /**
    * Add a new entry
@@ -15,7 +15,7 @@ class DeferBranch {
     }
 
     if (condition) {
-      this.branch = branch;
+      this._branch = branch;
     }
     return this;
   }
@@ -30,7 +30,7 @@ class DeferBranch {
       throw new TypeError('Branch must be a function');
     }
 
-    this.nomatchHandler = handler;
+    this._nomatchHandler = handler;
     return this;
   }
 
@@ -40,12 +40,12 @@ class DeferBranch {
    * - if no branch matched and no nomatch handler, return undefined
    */
   run(): unknown {
-    if (this.branch) {
-      return this.branch();
+    if (this._branch) {
+      return this._branch();
     }
 
-    if (this.nomatchHandler) {
-      return this.nomatchHandler();
+    if (this._nomatchHandler) {
+      return this._nomatchHandler();
     }
   }
 }
