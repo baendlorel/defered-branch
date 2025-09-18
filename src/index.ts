@@ -53,4 +53,4 @@ class DeferBranch {
 /**
  * __PKG_INFO__
  */
-export const deferBranch = () => new DeferBranch();
+export const deferedBranch = () => new DeferBranch();
