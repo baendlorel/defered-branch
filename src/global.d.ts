@@ -1,1 +1,1 @@
-type Fn = (...args: unknown[]) => unknown;
+type Fn = (...args: any[]) => any;
