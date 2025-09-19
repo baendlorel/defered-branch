@@ -8,15 +8,25 @@ describe('deferedBranch', () => {
     expect(branch.run()).toBe('matched');
   });
 
-  it('should run nomatch handler if no branch matched', () => {
-    const nomatch = () => 'no match';
-    const branch = deferedBranch()
-      .add(false, () => 'should not run')
-      .nomatch(nomatch);
-    expect(branch.run()).toBe('no match');
+  it('nomatch should run immediately when no branch matched', () => {
+    const called: string[] = [];
+    // nomatch runs immediately when no branch matched
+    deferedBranch()
+      .add(false, () => called.push('branch'))
+      .nomatch(() => called.push('nomatch'));
+
+    expect(called).toEqual(['nomatch']);
   });
 
-  it('should return undefined if no branch and no nomatch', () => {
+  it('deferedNomatch should run when run() is called', () => {
+    const branch = deferedBranch()
+      .add(false, () => 'no')
+      .deferedNomatch(() => 'fallback');
+
+    expect(branch.run()).toBe('fallback');
+  });
+
+  it('should return undefined if no branch and no nomatch handlers', () => {
     const branch = deferedBranch();
     expect(branch.run()).toBeUndefined();
   });
@@ -29,12 +39,10 @@ describe('deferedBranch', () => {
   });
 
   it('should throw TypeError if branch is not a function', () => {
-    // @ts-expect-error
-    expect(() => deferedBranch().add(true, 123)).toThrow(TypeError);
+    expect(() => deferedBranch().add(true, 123 as any)).toThrow(TypeError);
   });
 
   it('should throw TypeError if nomatch is not a function', () => {
-    // @ts-expect-error
-    expect(() => deferedBranch().nomatch(123)).toThrow(TypeError);
+    expect(() => deferedBranch().nomatch(123 as any)).toThrow(TypeError);
   });
 });

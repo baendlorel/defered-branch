@@ -90,9 +90,11 @@ If no branch has been matched when this is called, the `handler` is invoked imme
 
 Register a handler to be executed by `run()` if no branch matched. Unlike `nomatch`, this does not run immediately — it defers execution until `run()`.
 
-### `run(): unknown`
+### `run(...args: unknown): unknown`
 
 Execute the matched branch and return its value. If no branch matched but a `deferedNomatch` handler was set, returns the handler's return value. Returns `undefined` if neither exists.
+
+`args` will be passed to the matched branch or the `deferedNomatch` handler when they are invoked.
 
 ## Types & Distribution
 

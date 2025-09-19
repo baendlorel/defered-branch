@@ -58,14 +58,15 @@ class DeferBranch {
    * If some branch matched, return its returnValue
    * - if no branch matched, return the nomatch handler returnValue
    * - if no branch matched and no nomatch handler, return undefined
+   * @param args arguments to pass to the matched branch or nomatch handler
    */
-  run(): unknown {
+  run(...args: unknown[]): unknown {
     if (this._branch) {
-      return this._branch();
+      return this._branch(...args);
     }
 
     if (this._nomatch) {
-      return this._nomatch();
+      return this._nomatch(...args);
     }
   }
 }
