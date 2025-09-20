@@ -4,7 +4,7 @@ export class DeferBranch<BranchFn extends AnyFn, NoMatchFn extends AnyFn = AnyFn
 
   /**
    * Add a new entry
-   * - will **override** the previous matched branch
+   * - **First truthy first served**.
    * @param condition the condition to match
    * @param branch the branch to run when matched
    * @returns this
@@ -14,7 +14,8 @@ export class DeferBranch<BranchFn extends AnyFn, NoMatchFn extends AnyFn = AnyFn
       throw new TypeError('DeferBranch: branch must be a function');
     }
 
-    if (condition) {
+    // & Preventing later branches from overwriting earlier matched branch
+    if (condition && !this._branch) {
       this._branch = branch;
     }
     return this;

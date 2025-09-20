@@ -8,7 +8,7 @@ export class DeferBranchDynamic<BranchFn extends AnyFn, NoMatchFn extends AnyFn 
 
   /**
    * Add a new entry
-   * - will **override** the previous matched branch
+   * - **First truthy first served**.
    * @param condition the condition to match
    * @param branch the branch to run when matched
    * @returns this

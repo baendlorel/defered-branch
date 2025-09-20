@@ -59,6 +59,8 @@ branch
 // 3. Handle no-match case (optional)
 branch.nomatch(() => 'Access denied');
 
+// some other logic... like validate other arguments
+
 // 4. Execute and get result
 const result = branch.run();
 console.log(result); // Output based on user.role
@@ -165,7 +167,7 @@ Creates a new deferred branch instance for immediate execution scenarios.
 ##### `.add(condition: boolean, branch: Function): DeferBranch`
 
 - Adds a conditional branch that executes if condition is `true`
-- **Overrides** previous matched branches
+- First-match wins: the first truthy branch will be selected; later entries are ignored
 - Returns the instance for chaining
 
 ##### `.nomatch(handler: Function): DeferBranch`
@@ -190,7 +192,7 @@ Creates a new dynamic deferred branch instance for reusable logic patterns.
 
 - Adds a predicate-based conditional branch
 - `condition` is a function that returns boolean
-- **Overrides** previous matched branches
+- First-match wins: the first truthy branch will be selected; later entries are ignored
 
 ##### `.nomatch(handler: Function): DeferBranchDynamic`
 
