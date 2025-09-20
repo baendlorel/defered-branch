@@ -39,8 +39,7 @@ export class DeferBranch<BranchFn extends AnyFn, NoMatchFn extends AnyFn = AnyFn
   }
 
   /**
-   * When no branch matched, run this handler
-   * - Will be called when `run()` is called
+   * When calling `this.run` and no branch matched, run this handler
    * @param handler handle the exhausted case
    * @returns this
    */
@@ -56,8 +55,10 @@ export class DeferBranch<BranchFn extends AnyFn, NoMatchFn extends AnyFn = AnyFn
 
   /**
    * If some branch matched, return its returnValue
-   * - if no branch matched, return the nomatch handler returnValue
+   * - if no branch matched, return the nomatch handler's returnValue
    * - if no branch matched and no nomatch handler, return undefined
+   *
+   * > Note: Although args are for the matched branch, they will also be passed to nomatch handler
    * @param args arguments to pass to the matched branch or nomatch handler
    */
   run(...args: Parameters<BranchFn>): ReturnType<BranchFn> | ReturnType<NoMatchFn> | undefined {

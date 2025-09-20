@@ -56,9 +56,7 @@ export class DeferBranchDynamic<BranchFn extends AnyFn, NoMatchFn extends AnyFn 
 
   /**
    * If some branch matched, return its returnValue
-   * - if no branch matched, return the nomatch handler returnValue
-   * - if no branch matched and no nomatch handler, return undefined
-   * @param args arguments to pass to the matched branch or nomatch handler
+   * @param args arguments to pass to the matched branch
    */
   run(...args: Parameters<BranchFn>): ReturnType<BranchFn> | undefined {
     return this._branch?.apply(this, args);
