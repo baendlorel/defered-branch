@@ -1,111 +1,226 @@
-# defered-branch 🚦
-
-A tiny TypeScript/JavaScript utility for deferred branching logic.  
-It provides a small, chainable API to register conditional branches and two kinds of "no-match" handlers: one that runs immediately when no branch was matched, and another that runs later when you call `run()`.
+# Defered Branch 🌿
 
 For more awesome packages, check out [my homepage💛](https://baendlorel.github.io/?repoType=npm)
 
-## Highlights ✨
+> Sometimes we need to judge something with multiple cases, but the main job should be done later. So we have Defered Branch! ✨
 
-- Chainable API for registering branches
-- Only the last matched branch is executed
-- Immediate `nomatch` handler (runs instantly when no branch matched)
-- Deferred `deferedNomatch` handler (runs when `run()` is invoked)
-- TypeScript declarations included
+A TypeScript/JavaScript library that provides elegant deferred conditional branching with two powerful variants: **defered-branch** for immediate execution and **defered-branch-dynamic** for reusable logic patterns.
 
-## Installation 📦
+## 🚀 Features
+
+- 🎯 **Two Execution Models**: Choose between immediate execution or dynamic reusable logic
+- 🔒 **Type Safe**: Full TypeScript support with proper type inference
+- 🪶 **Lightweight**: Zero dependencies, minimal footprint
+- 🧩 **Flexible**: Works with any function signature and return types
+- 📦 **ESM Ready**: Modern module system support
+
+## 📦 Installation
 
 ```bash
-pnpm add defered-branch
-# or
 npm install defered-branch
+# or
+pnpm add defered-branch
 ```
 
-## Export / Import 🚀
+## 🌟 When to Use Which?
 
-The package exports a factory named `deferedBranch` (note the spelling):
+### `deferedBranch` - One-time Immediate Execution 🏃‍♂️
 
-```ts
-import { deferedBranch } from 'defered-branch';
-```
+Perfect for scenarios where you need to evaluate conditions **once** and execute immediately:
 
-## Basic Usage
+- One-time conditional flows
+- Static condition evaluation
 
-```ts
-import { deferedBranch } from 'defered-branch';
+### `deferedBranchDynamic` - Reusable Logic Patterns 🔄
 
-// register branches - only the last matched branch will run
-const b = deferedBranch()
-  .add(false, () => 'A')
-  .add(true, () => 'B');
+Ideal when you need to **reuse** the same branching logic multiple times with different inputs:
 
-console.log(b.run()); // 'B'
-```
+- Event handlers with varying states
+- Repeated conditional logic with dynamic data
+- State-dependent operations that change over time
 
-## nomatch vs deferedNomatch
+## 📚 Usage Examples
 
-There are two ways to handle the case when no branch matches:
+### Basic deferedBranch Usage
 
-- `nomatch(handler: Fn)` — runs the handler immediately if no branch has been matched yet. Note: if `nomatch` runs the handler immediately, later calls to `add(true, ...)` will not retroactively affect that call.
-- `deferedNomatch(handler: Fn)` — registers a handler that will be executed when `run()` is called and no branch matched.
-
-Examples:
-
-```ts
+```typescript
 import { deferedBranch } from 'defered-branch';
 
-// nomatch runs immediately when invoked if no branch matched
-deferedBranch()
-  .add(false, () => 'x')
-  .nomatch(() => console.log('immediate nomatch')) // prints now
-  .add(true, () => console.log('will not be printed')); // ignored for the already-called nomatch
+// Steps to use:
+// 1. Create instance
+const branch = deferedBranch();
 
-// deferedNomatch runs when run() is called
-const b2 = deferedBranch()
-  .add(false, () => 'x')
-  .deferedNomatch(() => 'deferred fallback');
+// 2. Add conditional branches
+branch
+  .add(user.role === 'admin', () => 'Access granted to admin panel')
+  .add(user.role === 'user', () => 'Access granted to user dashboard')
+  .add(user.role === 'guest', () => 'Limited access granted');
 
-console.log(b2.run()); // 'deferred fallback'
+// 3. Handle no-match case (optional)
+branch.deferedNomatch(() => 'Access denied');
+
+// 4. Execute and get result
+const result = branch.run();
+console.log(result); // Output based on user.role
 ```
 
-## API Reference 📚
+### Advanced deferedBranch with Parameters
 
-All functions accept a `Fn` type: `type Fn = (...args: unknown[]) => unknown`.
+```typescript
+const calculator = deferedBranch<(a: number, b: number) => number>();
 
-### `deferedBranch(): DeferBranch`
+calculator
+  .add(operation === 'add', (a, b) => a + b)
+  .add(operation === 'multiply', (a, b) => a * b)
+  .add(operation === 'divide', (a, b) => a / b)
+  .deferedNomatch(() => {
+    throw new Error('Unknown operation');
+  });
 
-Create a new `DeferBranch` instance.
+const result = calculator.run(10, 5); // Returns calculated result
+```
 
-### `add(condition: boolean, branch: Fn): DeferBranch`
+### deferedBranchDynamic for Reusable Logic
 
-Register a branch. If `condition` is true the provided `branch` becomes the current matched branch. Later `add(true, ...)` calls will override the matched branch.
+```typescript
+import { deferedBranchDynamic } from 'defered-branch';
 
-Throws `TypeError` if `branch` is not a function.
+// Steps to use:
+// 1. Create instance
+const statusHandler = deferedBranchDynamic<(message: string) => void>();
 
-### `nomatch(handler: Fn): DeferBranch`
+// 2. Add predicate-based branches
+statusHandler
+  .add(
+    () => server.status === 'online',
+    (msg) => logger.info(`✅ ${msg}`)
+  )
+  .add(
+    () => server.status === 'maintenance',
+    (msg) => logger.warn(`⚠️ ${msg}`)
+  )
+  .add(
+    () => server.status === 'offline',
+    (msg) => logger.error(`❌ ${msg}`)
+  );
 
-If no branch has been matched when this is called, the `handler` is invoked immediately. This is useful for side-effects that should run right away when a branch is absent. Returns the instance for chaining. Throws `TypeError` when `handler` is not a function.
+// 3. Add fallback handler
+statusHandler.nomatch((msg) => logger.debug(`🤔 Unknown status: ${msg}`));
 
-### `deferedNomatch(handler: Fn): DeferBranch`
+// 4. Use repeatedly with different conditions
+statusHandler.predicate(); // Evaluates current server.status
+statusHandler.run('Server health check completed');
 
-Register a handler to be executed by `run()` if no branch matched. Unlike `nomatch`, this does not run immediately — it defers execution until `run()`.
+// Later, when server.status changes...
+statusHandler.predicate(); // Re-evaluates with new status
+statusHandler.run('Status updated');
+```
 
-### `run(...args: unknown): unknown`
+### Real-world Example: Theme Switching
 
-Execute the matched branch and return its value. If no branch matched but a `deferedNomatch` handler was set, returns the handler's return value. Returns `undefined` if neither exists.
+```typescript
+const themeHandler = deferedBranchDynamic<() => void>();
 
-`args` will be passed to the matched branch or the `deferedNomatch` handler when they are invoked.
+themeHandler
+  .add(
+    () => preferences.theme === 'dark',
+    () => applyDarkTheme()
+  )
+  .add(
+    () => preferences.theme === 'light',
+    () => applyLightTheme()
+  )
+  .add(
+    () => preferences.theme === 'auto',
+    () => applySystemTheme()
+  )
+  .nomatch(() => {
+    // usually handles parameter validations
+    throw new TypeError('Invalid theme preference');
+  });
 
-## Types & Distribution
+// Reuse whenever preferences change
+function onConfigChange() {
+  themeHandler.predicate();
+  xxxHandler.predicate();
+  yyyHandler.predicate();
 
-- Types are included (`"types": "./dist/index.d.ts"` in package.json).
-- The package entrypoint is an ESM module at `./dist/index.mjs`.
+  // some other logic...create some objects..
+  // some other logic...run some funtions...
 
-## Error Handling ⚠️
+  themeHandler.run();
+  xxxHandler.run();
+  yyyHandler.run();
+}
+```
 
-- `TypeError` is thrown if a non-function is passed as a branch or handler.
+## 🔧 API Reference
 
-## Author & License
+### deferedBranch()
 
-- Author: Kasukabe Tsumugi (<futami16237@gmail.com>)
-- License: MIT
+Creates a new deferred branch instance for immediate execution scenarios.
+
+#### Methods
+
+##### `.add(condition: boolean, branch: Function): DeferBranch`
+
+- Adds a conditional branch that executes if condition is `true`
+- **Overrides** previous matched branches
+- Returns the instance for chaining
+
+##### `.nomatch(handler: Function): DeferBranch`
+
+- Sets an immediate fallback handler
+- **Executes instantly** if no previous branch matched
+- **Ignores** later matched branches
+
+##### `.deferedNomatch(handler: Function): DeferBranch`
+
+- Sets a deferred fallback handler for `.run()` time
+- Only executes when `.run()` is called and no branch matched
+
+##### `.run(...args): any`
+
+- Executes the matched branch or fallback handler
+- Passes arguments to the executed function
+- Returns the function's return value or `undefined`
+
+### deferedBranchDynamic()
+
+Creates a new dynamic deferred branch instance for reusable logic patterns.
+
+#### Methods
+
+##### `.add(condition: Predicate, branch: Function): DeferBranchDynamic`
+
+- Adds a predicate-based conditional branch
+- `condition` is a function that returns boolean
+- **Overrides** previous matched branches
+
+##### `.nomatch(handler: Function): DeferBranchDynamic`
+
+- Sets a fallback handler for when no predicates match
+- Executes during `.predicate()` evaluation
+
+##### `.predicate(...args): void`
+
+- Evaluates all conditions to find the first match
+- Call this before `.run()` to update the matched branch
+- Essential for dynamic behavior
+
+##### `.run(...args): any`
+
+- Executes the currently matched branch
+- Returns the function's return value or `undefined`
+
+## 📄 License
+
+MIT License - see [LICENSE](LICENSE) file for details.
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit issues and pull requests.
+
+---
+
+Made with ❤️ by [Kasukabe Tsumugi](https://github.com/baendlorel) (´｡• ᵕ •｡`) ♡
