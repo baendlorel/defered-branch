@@ -57,7 +57,7 @@ branch
   .add(user.role === 'guest', () => 'Limited access granted');
 
 // 3. Handle no-match case (optional)
-branch.deferedNomatch(() => 'Access denied');
+branch.nomatch(() => 'Access denied');
 
 // 4. Execute and get result
 const result = branch.run();
@@ -73,7 +73,7 @@ calculator
   .add(operation === 'add', (a, b) => a + b)
   .add(operation === 'multiply', (a, b) => a * b)
   .add(operation === 'divide', (a, b) => a / b)
-  .deferedNomatch(() => {
+  .nomatch(() => {
     throw new Error('Unknown operation');
   });
 
@@ -173,11 +173,6 @@ Creates a new deferred branch instance for immediate execution scenarios.
 - Sets an immediate fallback handler
 - **Executes instantly** if no previous branch matched
 - **Ignores** later matched branches
-
-##### `.deferedNomatch(handler: Function): DeferBranch`
-
-- Sets a deferred fallback handler for `.run()` time
-- Only executes when `.run()` is called and no branch matched
 
 ##### `.run(...args): any`
 

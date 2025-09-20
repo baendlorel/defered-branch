@@ -18,14 +18,6 @@ describe('deferedBranch', () => {
     expect(called).toEqual(['nomatch']);
   });
 
-  it('deferedNomatch should run when run() is called', () => {
-    const branch = deferedBranch()
-      .add(false, () => 'no')
-      .deferedNomatch(() => 'fallback');
-
-    expect(branch.run()).toBe('fallback');
-  });
-
   it('should return undefined if no branch and no nomatch handlers', () => {
     const branch = deferedBranch();
     expect(branch.run()).toBeUndefined();

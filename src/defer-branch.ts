@@ -21,8 +21,8 @@ export class DeferBranch<BranchFn extends AnyFn, NoMatchFn extends AnyFn = AnyFn
   }
 
   /**
-   * When no branch matched, run this handler
-   * - This will be called **instantly** and **ignores later matched branches**
+   * Register a handler to be called when no branch matched
+   * - This will be called **instantly and ignores later matched branches**
    * @param handler handle the exhausted case
    * @returns this
    */
@@ -34,21 +34,6 @@ export class DeferBranch<BranchFn extends AnyFn, NoMatchFn extends AnyFn = AnyFn
     if (!this._branch) {
       handler();
     }
-
-    return this;
-  }
-
-  /**
-   * When calling `this.run` and no branch matched, run this handler
-   * @param handler handle the exhausted case
-   * @returns this
-   */
-  deferedNomatch(handler: NoMatchFn): DeferBranch<BranchFn> {
-    if (typeof handler !== 'function') {
-      throw new TypeError('DeferBranch: handler must be a function');
-    }
-
-    this._nomatch = handler;
 
     return this;
   }
