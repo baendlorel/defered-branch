@@ -15,7 +15,7 @@ For more awesome packages, check out [my homepage💛](https://baendlorel.github
 - [🤝 Contributing](#contributing)
 - [🦋 Trivia](#trivia)
 
-<h2 id="features">🚀 Features</h2>
+## Features
 
 - 🎯 **Four Execution Patterns**: Single/all-match × immediate/dynamic logic
 - 🔒 **Type Safe**: Full TypeScript support with type inference
@@ -23,9 +23,9 @@ For more awesome packages, check out [my homepage💛](https://baendlorel.github
 - 🧩 **Flexible**: Works with any function signature
 - 📦 **Generic**: Customizable branch, condition, and nomatch handler types
 
-<h2 id="change-log">⏲️ Change Log</h2>
+## Change Log
 
-- 2.2.1-2.2.2
+- 2.2.1-2.2.3
   - Fix: Clear matched branch after execution to prevent stale state issues.
   - Add index to this document.
 
@@ -33,7 +33,7 @@ For more awesome packages, check out [my homepage💛](https://baendlorel.github
   - Add `deferedBranchAll` and `deferedBranchAllDynamic` for multi-match scenarios.
   - Fix documentation typos.
 
-<h2 id="installation">📦 Installation</h2>
+## Installation
 
 ```bash
 npm install defered-branch
@@ -41,7 +41,7 @@ npm install defered-branch
 pnpm add defered-branch
 ```
 
-<h2 id="overview">🌟 Overview</h2>
+## Overview
 
 ### `deferedBranch` - Single-Match Immediate 🏃‍♂️
 
@@ -67,7 +67,7 @@ Reusable branching logic, execute all matches dynamically.
 
 **Use cases:** Plugin systems, middleware chains, observer patterns
 
-<h2 id="usage-examples">Usage Examples</h2>
+## Usage Examples
 
 ### Basic `deferedBranch`
 
@@ -204,7 +204,7 @@ function h<T extends HTMLTag>(
 }
 ```
 
-<h2 id="api-reference">🔧 API Reference</h2>
+## API Reference
 
 ### deferedBranch()
 
@@ -266,7 +266,7 @@ _Same as deferedBranch_
 
 _Same as deferedBranchDynamic_
 
-<h2 id="type-annotation">🧾 Type Annotation</h2>
+## Type Annotation
 
 The factory functions `deferedBranch`, `deferedBranchDynamic`, `deferedBranchAll`, and `deferedBranchAllDynamic` are generic helpers. You can provide explicit type parameters to describe the branch function signature and the optional `nomatch` handler.
 
@@ -323,15 +323,15 @@ calc.predicate();
 const result = calc.run(2, 3); // typed as number | undefined
 ```
 
-<h2 id="license">📄 License</h2>
+## License
 
 MIT License - see [LICENSE](LICENSE) file for details.
 
-<h2 id="contributing">🤝 Contributing</h2>
+## Contributing
 
 Contributions are welcome! Please feel free to submit issues and pull requests.
 
-<h2 id="trivia">🦋 Trivia</h2>
+## Trivia
 
 [**KT.js**](https://www.npmjs.com/package/kt.js) is the reason of this package's birth. It uses `deferedBranchDynamic` internally to handle attribute and content processing in a clean, reusable way.
 
