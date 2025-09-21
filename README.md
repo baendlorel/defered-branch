@@ -4,20 +4,20 @@ A lightweight library providing a if-else like branch, but with deferred executi
 
 For more awesome packages, check out [my homepage💛](https://baendlorel.github.io/?repoType=npm)
 
-- [🚀 Features](#features)
-- [⏲️ Change Log](#change-log)
-- [📦 Installation](#installation)
-- [🌟 Overview](#overview)
-- [📚 Usage Examples](#usage-examples)
-- [🔧 API Reference](#api-reference)
-- [🧾 Type Annotation](#type-annotation)
-- [📄 License](#license)
-- [🤝 Contributing](#contributing)
-- [🦋 Trivia](#trivia)
+- [🚀 Features](#user-content-features)
+- [⏲️ Change Log](#user-content-change-log)
+- [📦 Installation](#user-content-installation)
+- [🌟 Overview](#user-content-overview)
+- [📚 Usage Examples](#user-content-usage-examples)
+- [🔧 API Reference](#user-content-api-reference)
+- [🧾 Type Annotation](#user-content-type-annotation)
+- [📄 License](#user-content-license)
+- [🤝 Contributing](#user-content-contributing)
+- [🦋 Trivia](#user-content-trivia)
 
 ## Features
 
-<a id="features"></a>
+<a id="user-content-features"></a>
 
 - 🎯 **Four Execution Patterns**: Single/all-match × immediate/dynamic logic
 - 🔒 **Type Safe**: Full TypeScript support with type inference
@@ -27,11 +27,12 @@ For more awesome packages, check out [my homepage💛](https://baendlorel.github
 
 ## Change Log
 
-<a id="change-log"></a>
+<a id="user-content-change-log"></a>
 
-- 2.2.1-2.2.3
+- 2.2.1-2.2.5
   - Fix: Clear matched branch after execution to prevent stale state issues.
   - Add index to this document.
+    - Fixing anchors for npm many times 💢
 
 - 2.2.0
   - Add `deferedBranchAll` and `deferedBranchAllDynamic` for multi-match scenarios.
@@ -39,7 +40,7 @@ For more awesome packages, check out [my homepage💛](https://baendlorel.github
 
 ## Installation
 
-<a id="installation"></a>
+<a id="user-content-installation"></a>
 
 ```bash
 npm install defered-branch
@@ -49,7 +50,7 @@ pnpm add defered-branch
 
 ## Overview
 
-<a id="overview"></a>
+<a id="user-content-overview"></a>
 
 ### `deferedBranch` - Single-Match Immediate 🏃‍♂️
 
@@ -77,7 +78,7 @@ Reusable branching logic, execute all matches dynamically.
 
 ## Usage Examples
 
-<a id="usage-examples"></a>
+<a id="user-content-usage-examples"></a>
 
 ### Basic `deferedBranch`
 
@@ -216,7 +217,7 @@ function h<T extends HTMLTag>(
 
 ## API Reference
 
-<a id="api-reference"></a>
+<a id="user-content-api-reference"></a>
 
 ### deferedBranch()
 
@@ -280,7 +281,7 @@ _Same as deferedBranchDynamic_
 
 ## Type Annotation
 
-<a id="type-annotation"></a>
+<a id="user-content-type-annotation"></a>
 
 The factory functions `deferedBranch`, `deferedBranchDynamic`, `deferedBranchAll`, and `deferedBranchAllDynamic` are generic helpers. You can provide explicit type parameters to describe the branch function signature and the optional `nomatch` handler.
 
@@ -339,19 +340,19 @@ const result = calc.run(2, 3); // typed as number | undefined
 
 ## License
 
-<a id="license"></a>
+<a id="user-content-license"></a>
 
 MIT License - see [LICENSE](LICENSE) file for details.
 
 ## Contributing
 
-<a id="contributing"></a>
+<a id="user-content-contributing"></a>
 
 Contributions are welcome! Please feel free to submit issues and pull requests.
 
 ## Trivia
 
-<a id="trivia"></a>
+<a id="user-content-trivia"></a>
 
 [**KT.js**](https://www.npmjs.com/package/kt.js) is the reason of this package's birth. It uses `deferedBranchDynamic` internally to handle attribute and content processing in a clean, reusable way.
 
