@@ -19,7 +19,9 @@ import { DeferBranchDynamic } from './defer-branch-dynamic.js';
  *   a.add(true, someFn satisfies BranchFn);
  *   a.nomatch(otherFn satisfies NoMatchFn);
  *
- *   a.run(); // input args are restricted to Parameters<BranchFn>
+ *   // some other logic
+ *
+ *   a.run(...args); // input args are restricted to Parameters<BranchFn>
  * ```
  *
  * __PKG_INFO__
@@ -45,10 +47,16 @@ export const deferedBranch = <BranchFn extends AnyFn = AnyFn, NoMatchFn extends 
  *   const a = deferedBranch<BranchFn, NoMatchFn, ConditionFn>();
  *
  *   // then we have restrictions:
- *   a.add(someFn statisfies ConditionFn, secondFn satisfies BranchFn);
+ *   a.add(someFn satisfies ConditionFn, secondFn satisfies BranchFn);
  *   a.nomatch(thirdFn satisfies NoMatchFn);
  *
- *   a.run(); // input args are restricted to Parameters<BranchFn>
+ *   // some other logic
+ *
+ *   a.predicate(...args);
+ *
+ *   // some other logic
+ *
+ *   a.run(...args); // input args are restricted to Parameters<BranchFn>
  * ```
  *
  * __PKG_INFO__
