@@ -1,4 +1,4 @@
-export class DeferBranchAllDynamic<
+export class DeferedBranchAllDynamic<
   BranchFn extends AnyFn,
   NoMatchFn extends AnyFn,
   ConditionFn extends AnyFn = Predicate<BranchFn>,

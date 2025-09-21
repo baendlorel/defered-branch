@@ -1,7 +1,7 @@
-import { DeferBranch } from './defer-branch.js';
-import { DeferBranchDynamic } from './defer-branch-dynamic.js';
-import { DeferBranchAllDynamic } from './defer-branch-all-dynamic.js';
-import { DeferBranchAll } from './defer-branch-all.js';
+import { DeferedBranch } from './defer-branch.js';
+import { DeferedBranchDynamic } from './defer-branch-dynamic.js';
+import { DeferedBranchAllDynamic } from './defer-branch-all-dynamic.js';
+import { DeferedBranchAll } from './defer-branch-all.js';
 
 /**
  * ## Steps to use
@@ -29,7 +29,7 @@ import { DeferBranchAll } from './defer-branch-all.js';
  * __PKG_INFO__
  */
 export const deferedBranch = <BranchFn extends AnyFn = AnyFn, NoMatchFn extends AnyFn = AnyFn>() =>
-  new DeferBranch<BranchFn, NoMatchFn>();
+  new DeferedBranch<BranchFn, NoMatchFn>();
 
 /**
  * ## Steps to use
@@ -67,7 +67,7 @@ export const deferedBranchDynamic = <
   BranchFn extends AnyFn = AnyFn,
   NoMatchFn extends AnyFn = AnyFn,
   ConditionFn extends AnyFn = Predicate<BranchFn>,
->() => new DeferBranchDynamic<BranchFn, NoMatchFn, ConditionFn>();
+>() => new DeferedBranchDynamic<BranchFn, NoMatchFn, ConditionFn>();
 
 /**
  * ## Steps to use
@@ -97,7 +97,7 @@ export const deferedBranchDynamic = <
 export const deferedBranchAll = <
   BranchFn extends AnyFn = AnyFn,
   NoMatchFn extends AnyFn = AnyFn,
->() => new DeferBranchAll<BranchFn, NoMatchFn>();
+>() => new DeferedBranchAll<BranchFn, NoMatchFn>();
 
 /**
  * ## Steps to use
@@ -135,4 +135,4 @@ export const deferedBranchAllDynamic = <
   BranchFn extends AnyFn = AnyFn,
   NoMatchFn extends AnyFn = AnyFn,
   ConditionFn extends AnyFn = Predicate<BranchFn>,
->() => new DeferBranchAllDynamic<BranchFn, NoMatchFn, ConditionFn>();
+>() => new DeferedBranchAllDynamic<BranchFn, NoMatchFn, ConditionFn>();

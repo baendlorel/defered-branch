@@ -1,6 +1,5 @@
-export class DeferBranch<BranchFn extends AnyFn, NoMatchFn extends AnyFn> {
+export class DeferedBranch<BranchFn extends AnyFn, NoMatchFn extends AnyFn> {
   private _branch: BranchFn | null = null;
-  private _nomatch: NoMatchFn | null = null;
 
   /**
    * Add a new entry
@@ -27,7 +26,7 @@ export class DeferBranch<BranchFn extends AnyFn, NoMatchFn extends AnyFn> {
    * @param handler handle the exhausted case
    * @returns this
    */
-  nomatch(handler: AnyFn): this {
+  nomatch(handler: NoMatchFn): this {
     if (typeof handler !== 'function') {
       throw new TypeError('DeferBranch: branch must be a function');
     }
