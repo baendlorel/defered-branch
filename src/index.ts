@@ -9,9 +9,23 @@ import { DeferBranchDynamic } from './defer-branch-dynamic.js';
  * 4. ...run some other logic
  * 5. run this branch by a.run();
  *
+ * ## Type Annotation (optional)
+ * ```ts
+ *   type BranchFn = (a: number) => void;
+ *   type NoMatchFn = () => void;
+ *   const a = deferedBranch<BranchFn, NoMatchFn>();
+ *
+ *   // then we have restrictions:
+ *   a.add(true, someFn satisfies BranchFn);
+ *   a.nomatch(otherFn satisfies NoMatchFn);
+ *
+ *   a.run(); // input args are restricted to Parameters<BranchFn>
+ * ```
+ *
  * __PKG_INFO__
  */
-export const deferedBranch = () => new DeferBranch();
+export const deferedBranch = <BranchFn extends AnyFn = AnyFn, NoMatchFn extends AnyFn = AnyFn>() =>
+  new DeferBranch<BranchFn, NoMatchFn>();
 
 /**
  * ## Steps to use
@@ -22,6 +36,25 @@ export const deferedBranch = () => new DeferBranch();
  * 5. ...run some other logic
  * 6. run this branch by a.run();
  *
+ * ## Type Annotation (optional)
+ * ```ts
+ *   type BranchFn = (a: number) => void;
+ *   type NoMatchFn = () => void;
+ *   // optional, you can customize the condition function type
+ *   type ConditionFn = Predicate<BranchFn>;
+ *   const a = deferedBranch<BranchFn, NoMatchFn, ConditionFn>();
+ *
+ *   // then we have restrictions:
+ *   a.add(someFn statisfies ConditionFn, secondFn satisfies BranchFn);
+ *   a.nomatch(thirdFn satisfies NoMatchFn);
+ *
+ *   a.run(); // input args are restricted to Parameters<BranchFn>
+ * ```
+ *
  * __PKG_INFO__
  */
-export const deferedBranchDynamic = () => new DeferBranchDynamic();
+export const deferedBranchDynamic = <
+  BranchFn extends AnyFn = AnyFn,
+  NoMatchFn extends AnyFn = AnyFn,
+  ConditionFn extends AnyFn = Predicate<BranchFn>,
+>() => new DeferBranchDynamic<BranchFn, NoMatchFn, ConditionFn>();

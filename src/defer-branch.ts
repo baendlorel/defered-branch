@@ -1,4 +1,4 @@
-export class DeferBranch<BranchFn extends AnyFn, NoMatchFn extends AnyFn = AnyFn> {
+export class DeferBranch<BranchFn extends AnyFn, NoMatchFn extends AnyFn> {
   private _branch: BranchFn | null = null;
   private _nomatch: NoMatchFn | null = null;
 
@@ -9,7 +9,7 @@ export class DeferBranch<BranchFn extends AnyFn, NoMatchFn extends AnyFn = AnyFn
    * @param branch the branch to run when matched
    * @returns this
    */
-  add(condition: boolean, branch: BranchFn): DeferBranch<BranchFn> {
+  add(condition: boolean, branch: BranchFn): this {
     if (typeof branch !== 'function') {
       throw new TypeError('DeferBranch: branch must be a function');
     }
@@ -27,7 +27,7 @@ export class DeferBranch<BranchFn extends AnyFn, NoMatchFn extends AnyFn = AnyFn
    * @param handler handle the exhausted case
    * @returns this
    */
-  nomatch(handler: AnyFn): DeferBranch<BranchFn> {
+  nomatch(handler: AnyFn): this {
     if (typeof handler !== 'function') {
       throw new TypeError('DeferBranch: branch must be a function');
     }

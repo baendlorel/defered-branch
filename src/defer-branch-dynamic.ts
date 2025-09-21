@@ -1,4 +1,8 @@
-export class DeferBranchDynamic<BranchFn extends AnyFn, NoMatchFn extends AnyFn = AnyFn> {
+export class DeferBranchDynamic<
+  BranchFn extends AnyFn,
+  NoMatchFn extends AnyFn,
+  ConditionFn extends AnyFn = Predicate<BranchFn>,
+> {
   /**
    * & Compress conditions and branches into a single array since they are paired
    */
@@ -13,7 +17,7 @@ export class DeferBranchDynamic<BranchFn extends AnyFn, NoMatchFn extends AnyFn 
    * @param branch the branch to run when matched
    * @returns this
    */
-  add(condition: Predicate<BranchFn>, branch: BranchFn): DeferBranchDynamic<BranchFn, NoMatchFn> {
+  add(condition: ConditionFn, branch: BranchFn): this {
     if (typeof condition !== 'function') {
       throw new TypeError('DeferBranch: condition must be a function');
     }
@@ -30,7 +34,7 @@ export class DeferBranchDynamic<BranchFn extends AnyFn, NoMatchFn extends AnyFn 
    * @param handler handle the exhausted case
    * @returns this
    */
-  nomatch(handler: AnyFn): DeferBranchDynamic<BranchFn, NoMatchFn> {
+  nomatch(handler: AnyFn): this {
     if (typeof handler !== 'function') {
       throw new TypeError('DeferBranch: handler must be a function');
     }

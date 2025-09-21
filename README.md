@@ -12,7 +12,7 @@ A TypeScript/JavaScript library that provides elegant deferred conditional branc
 - 🔒 **Type Safe**: Full TypeScript support with proper type inference
 - 🪶 **Lightweight**: Zero dependencies, minimal footprint
 - 🧩 **Flexible**: Works with any function signature and return types
-- 📦 **ESM Ready**: Modern module system support
+- 📦 **Type Annotation**: Full type annotation supported for the exported functions. You can customize handler's type of branch/condition/nomatch.
 
 ## 📦 Installation
 
@@ -198,6 +198,63 @@ Creates a new dynamic deferred branch instance for reusable logic patterns.
 
 - Sets a fallback handler for when no predicates match
 - Executes during `.predicate()` evaluation
+
+## 🧾 Type Annotation
+
+The factory functions `deferedBranch` and `deferedBranchDynamic` are generic helpers. You can provide explicit type parameters to describe the branch function signature and the optional `nomatch` handler.
+
+Below is an example using `deferedBranch`:
+
+```typescript
+import { deferedBranch } from 'defered-branch';
+
+// Here we declare that branches accept a message (string) and return void.
+// The factory signature is: deferedBranch<BranchFn, NoMatchFn>()
+const handler = deferedBranch<(msg: string) => void, () => void>();
+
+handler
+  .add(
+    process.env.STATUS === 'ok',
+    (msg) => console.log('OK:', msg) // this is restricted by `(msg: string) => void`
+  )
+  .add(
+    process.env.STATUS === 'warn',
+    (msg) => console.warn('WARN:', msg) // this is restricted by `(msg: string) => void`
+  )
+  .nomatch(
+    () => console.debug('unknown') // this is restricted by `() => void`
+  );
+
+handler.run('hello world'); // input args for `run` are restricted by `(msg: string) => void`
+```
+
+Notes:
+
+- If you omit generic parameters TypeScript will fall back to `AnyFn` and inference is weaker.
+- `BranchFn` defines the parameter types that `.run(...)` accepts and what each branch receives.
+- `NoMatchFn` defines the signature of the `nomatch`/`deferedNomatch` handler.
+
+Example: calculator with typed branches
+
+```typescript
+const calc = deferedBranchDynamic<(a: number, b: number) => number, () => never>();
+
+calc
+  .add(
+    () => operation === 'add',
+    (a, b) => a + b
+  )
+  .add(
+    () => operation === 'mul',
+    (a, b) => a * b
+  )
+  .nomatch(() => {
+    throw new Error('unknown operation');
+  });
+
+calc.predicate();
+const result = calc.run(2, 3); // typed as number | undefined
+```
 
 ##### `.predicate(...args): void`
 
