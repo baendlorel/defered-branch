@@ -1,4 +1,4 @@
-export class DeferBranchDynamic<
+export class DeferBranchAllDynamic<
   BranchFn extends AnyFn,
   NoMatchFn extends AnyFn,
   ConditionFn extends AnyFn = Predicate<BranchFn>,
@@ -7,7 +7,7 @@ export class DeferBranchDynamic<
    * & Compress conditions and branches into a single array since they are paired
    */
   private _condranches: AnyFn[] = [];
-  private _branch: BranchFn | null = null;
+  private _branches: BranchFn[] = [];
   private _nomatch: NoMatchFn | null = null;
 
   /**
@@ -50,24 +50,26 @@ export class DeferBranchDynamic<
     const len = this._condranches.length;
     for (let i = 0; i < len; i += 2) {
       if (this._condranches[i]()) {
-        this._branch = this._condranches[i + 1] as BranchFn;
-        return;
+        this._branches.push(this._condranches[i + 1] as BranchFn);
       }
     }
 
-    if (this._nomatch) {
+    if (this._nomatch && this._branches.length === 0) {
       this._nomatch.apply(this, args);
     }
   }
 
   /**
-   * Execute the first matched branch in order of addition
+   * If some branch matched, return its returnValue
    * @param args arguments to pass to the matched branch
-   * @returns the return value of the matched branch or void
    */
   run(...args: Parameters<BranchFn>): ReturnType<BranchFn> | undefined {
-    if (this._branch) {
-      return this._branch.apply(null, args);
+    const len = this._branches.length;
+    if (len === 0) {
+      return;
+    }
+    for (let i = 0; i < len; i++) {
+      this._branches[i].apply(null, args);
     }
   }
 }

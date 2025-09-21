@@ -1,5 +1,5 @@
-export class DeferBranch<BranchFn extends AnyFn, NoMatchFn extends AnyFn> {
-  private _branch: BranchFn | null = null;
+export class DeferBranchAll<BranchFn extends AnyFn, NoMatchFn extends AnyFn> {
+  private _branches: BranchFn[] = [];
   private _nomatch: NoMatchFn | null = null;
 
   /**
@@ -15,8 +15,8 @@ export class DeferBranch<BranchFn extends AnyFn, NoMatchFn extends AnyFn> {
     }
 
     // & Preventing later branches from overwriting earlier matched branch
-    if (condition && !this._branch) {
-      this._branch = branch;
+    if (condition) {
+      this._branches.push(branch);
     }
     return this;
   }
@@ -32,7 +32,7 @@ export class DeferBranch<BranchFn extends AnyFn, NoMatchFn extends AnyFn> {
       throw new TypeError('DeferBranch: branch must be a function');
     }
 
-    if (!this._branch) {
+    if (this._branches.length === 0) {
       handler();
     }
 
@@ -40,13 +40,16 @@ export class DeferBranch<BranchFn extends AnyFn, NoMatchFn extends AnyFn> {
   }
 
   /**
-   * Execute the first matched branch in order of addition
+   * Execute all matched branches in order of addition
    * @param args arguments to pass to the matched branch or nomatch handler
-   * @returns the return value of the matched branch or void
    */
-  run(...args: Parameters<BranchFn>): ReturnType<BranchFn> | void {
-    if (this._branch) {
-      return this._branch.apply(null, args);
+  run(...args: Parameters<BranchFn>): void {
+    const len = this._branches.length;
+    if (len === 0) {
+      return;
+    }
+    for (let i = 0; i < len; i++) {
+      this._branches[i].apply(null, args);
     }
   }
 }
