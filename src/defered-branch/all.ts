@@ -50,5 +50,6 @@ export class DeferedBranchAll<BranchFn extends AnyFn, NoMatchFn extends AnyFn> {
     for (let i = 0; i < len; i++) {
       this._branches[i].apply(null, args);
     }
+    this._branches.length = 0;
   }
 }

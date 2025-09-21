@@ -12,6 +12,17 @@ For more awesome packages, check out [my homepage💛](https://baendlorel.github
 - 🧩 **Flexible**: Works with any function signature
 - 📦 **Generic**: Customizable branch, condition, and nomatch handler types
 
+## ⏲️ Change Log (Symplified)
+
+### 2.2.1
+
+- Fix: Clear matched branch after execution to prevent stale state issues.
+
+### 2.2.0
+
+- Add `deferedBranchAll` and `deferedBranchAllDynamic` for multi-match scenarios.
+- Fix documentation typos.
+
 ## 📦 Installation
 
 ```bash

@@ -45,7 +45,9 @@ export class DeferedBranch<BranchFn extends AnyFn, NoMatchFn extends AnyFn> {
    */
   run(...args: Parameters<BranchFn>): ReturnType<BranchFn> | void {
     if (this._branch) {
-      return this._branch.apply(null, args);
+      const result = this._branch.apply(null, args);
+      this._branch = null;
+      return result;
     }
   }
 }

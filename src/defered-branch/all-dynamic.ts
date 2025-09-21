@@ -71,5 +71,6 @@ export class DeferedBranchAllDynamic<
     for (let i = 0; i < len; i++) {
       this._branches[i].apply(null, args);
     }
+    this._branches.length = 0;
   }
 }

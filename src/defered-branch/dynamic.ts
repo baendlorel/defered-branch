@@ -67,7 +67,9 @@ export class DeferedBranchDynamic<
    */
   run(...args: Parameters<BranchFn>): ReturnType<BranchFn> | undefined {
     if (this._branch) {
-      return this._branch.apply(null, args);
+      const result = this._branch.apply(null, args);
+      this._branch = null;
+      return result;
     }
   }
 }
