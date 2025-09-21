@@ -12,7 +12,7 @@ export class DeferBranchAllDynamic<
 
   /**
    * Add a new entry
-   * - **First truthy first served**.
+   * - **All truthy branches will be executed**.
    * @param condition the condition to match
    * @param branch the branch to run when matched
    * @returns this
@@ -44,7 +44,7 @@ export class DeferBranchAllDynamic<
   }
 
   /**
-   * Run the condition to find the first matched branch
+   * Run the conditions to find all matched branches
    */
   predicate(...args: Parameters<ConditionFn>): void {
     const len = this._condranches.length;
@@ -60,8 +60,8 @@ export class DeferBranchAllDynamic<
   }
 
   /**
-   * If some branch matched, return its returnValue
-   * @param args arguments to pass to the matched branch
+   * Execute all matched branches in order of addition
+   * @param args arguments to pass to the matched branches
    */
   run(...args: Parameters<BranchFn>): ReturnType<BranchFn> | undefined {
     const len = this._branches.length;

@@ -4,7 +4,7 @@ export class DeferBranchAll<BranchFn extends AnyFn, NoMatchFn extends AnyFn> {
 
   /**
    * Add a new entry
-   * - **First truthy first served**.
+   * - **All truthy branches will be executed**.
    * @param condition the condition to match
    * @param branch the branch to run when matched
    * @returns this

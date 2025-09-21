@@ -4,11 +4,11 @@ For more awesome packages, check out [my homepage💛](https://baendlorel.github
 
 > Sometimes we need to judge something with multiple cases, but the main job should be done later. So we have Defered Branch! ✨
 
-A TypeScript/JavaScript library that provides elegant deferred conditional branching with two powerful variants: **defered-branch** for immediate execution and **defered-branch-dynamic** for reusable logic patterns.
+A TypeScript/JavaScript library that provides elegant deferred conditional branching with four powerful variants: **defered-branch** for immediate execution, **defered-branch-dynamic** for reusable logic patterns, **defered-branch-all** for executing all matching branches immediately, and **defered-branch-all-dynamic** for reusable multi-branch execution.
 
 ## 🚀 Features
 
-- 🎯 **Two Execution Models**: Choose between immediate execution or dynamic reusable logic
+- 🎯 **Four Execution Models**: Choose between single-match vs all-match, and immediate vs dynamic reusable logic
 - 🔒 **Type Safe**: Full TypeScript support with proper type inference
 - 🪶 **Lightweight**: Zero dependencies, minimal footprint
 - 🧩 **Flexible**: Works with any function signature and return types
@@ -24,20 +24,35 @@ pnpm add defered-branch
 
 ## 🌟 When to Use Which?
 
-### `deferedBranch` - One-time Immediate Execution 🏃‍♂️
+### `deferedBranch` - Single-Match Immediate Execution 🏃‍♂️
 
-Perfect for scenarios where you need to evaluate conditions **once** and execute immediately:
+Perfect for scenarios where you need to evaluate conditions **once** and execute **the first match** immediately:
 
-- One-time conditional flows
-- Static condition evaluation
+- One-time conditional flows with single outcome
+- Static condition evaluation where only one branch should run
 
-### `deferedBranchDynamic` - Reusable Logic Patterns 🔄
+### `deferedBranchDynamic` - Single-Match Reusable Logic 🔄
 
-Ideal when you need to **reuse** the same branching logic multiple times with different inputs:
+Ideal when you need to **reuse** the same branching logic multiple times with different inputs, executing **only the first match**:
 
 - Event handlers with varying states
-- Repeated conditional logic with dynamic data
-- State-dependent operations that change over time
+- Repeated conditional logic with dynamic data where only one action is needed
+
+### `deferedBranchAll` - Multi-Match Immediate Execution 🎯
+
+Perfect for scenarios where you need to evaluate conditions **once** and execute **all matching branches** immediately:
+
+- Notification systems where multiple handlers should trigger
+- Validation systems where all applicable rules should run
+- Event handling where multiple listeners should respond
+
+### `deferedBranchAllDynamic` - Multi-Match Reusable Logic 🌊
+
+Ideal when you need to **reuse** branching logic that executes **all matching branches** with dynamic conditions:
+
+- Plugin systems where multiple plugins may handle the same event
+- Middleware chains where multiple handlers should process the same request
+- Observer patterns where multiple observers need to react to state changes
 
 ## 📚 Usage Examples
 
@@ -117,6 +132,14 @@ statusHandler.run('Server health check completed');
 statusHandler.predicate(); // Re-evaluates with new status
 statusHandler.run('Status updated');
 ```
+
+### deferedBranchAll for Multi-Match Execution
+
+_Same as deferedBranch_
+
+### deferedBranchAllDynamic
+
+_Same as deferedBranchDynamic_
 
 ### Real-world Example: Theme Switching
 
@@ -199,9 +222,28 @@ Creates a new dynamic deferred branch instance for reusable logic patterns.
 - Sets a fallback handler for when no predicates match
 - Executes during `.predicate()` evaluation
 
+##### `.predicate(...args): void`
+
+- Evaluates all conditions to find the first match
+- Call this before `.run()` to update the matched branch
+- Essential for dynamic behavior
+
+##### `.run(...args): any`
+
+- Executes the currently matched branch
+- Returns the function's return value or `undefined`
+
+### deferedBranchAll()
+
+_Same as deferedBranch_
+
+### deferedBranchAllDynamic()
+
+_Same as deferedBranchDynamic_
+
 ## 🧾 Type Annotation
 
-The factory functions `deferedBranch` and `deferedBranchDynamic` are generic helpers. You can provide explicit type parameters to describe the branch function signature and the optional `nomatch` handler.
+The factory functions `deferedBranch`, `deferedBranchDynamic`, `deferedBranchAll`, and `deferedBranchAllDynamic` are generic helpers. You can provide explicit type parameters to describe the branch function signature and the optional `nomatch` handler.
 
 Below is an example using `deferedBranch`:
 
@@ -255,17 +297,6 @@ calc
 calc.predicate();
 const result = calc.run(2, 3); // typed as number | undefined
 ```
-
-##### `.predicate(...args): void`
-
-- Evaluates all conditions to find the first match
-- Call this before `.run()` to update the matched branch
-- Essential for dynamic behavior
-
-##### `.run(...args): any`
-
-- Executes the currently matched branch
-- Returns the function's return value or `undefined`
 
 ## 📄 License
 
