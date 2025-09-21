@@ -46,7 +46,7 @@ export class DeferBranchDynamic<
   /**
    * Run the condition to find the first matched branch
    */
-  predicate(...args: Parameters<BranchFn>): void {
+  predicate(...args: Parameters<ConditionFn>): void {
     const len = this._condranches.length;
     for (let i = 0; i < len; i += 2) {
       if (this._condranches[i]()) {
