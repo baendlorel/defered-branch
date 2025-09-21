@@ -1,18 +1,16 @@
 # Defered Branch 🌿
 
+A lightweight library providing a if-else like branch, but with deferred execution. You can evaluate conditions now and execute the matched branch later.
+
 For more awesome packages, check out [my homepage💛](https://baendlorel.github.io/?repoType=npm)
-
-> Sometimes we need to judge something with multiple cases, but the main job should be done later. So we have Defered Branch! ✨
-
-A TypeScript/JavaScript library that provides elegant deferred conditional branching with four powerful variants: **defered-branch** for immediate execution, **defered-branch-dynamic** for reusable logic patterns, **defered-branch-all** for executing all matching branches immediately, and **defered-branch-all-dynamic** for reusable multi-branch execution.
 
 ## 🚀 Features
 
-- 🎯 **Four Execution Models**: Choose between single-match vs all-match, and immediate vs dynamic reusable logic
-- 🔒 **Type Safe**: Full TypeScript support with proper type inference
+- 🎯 **Four Execution Patterns**: Single/all-match × immediate/dynamic logic
+- 🔒 **Type Safe**: Full TypeScript support with type inference
 - 🪶 **Lightweight**: Zero dependencies, minimal footprint
-- 🧩 **Flexible**: Works with any function signature and return types
-- 📦 **Type Annotation**: Full type annotation supported for the exported functions. You can customize handler's type of branch/condition/nomatch.
+- 🧩 **Flexible**: Works with any function signature
+- 📦 **Generic**: Customizable branch, condition, and nomatch handler types
 
 ## 📦 Installation
 
@@ -22,66 +20,35 @@ npm install defered-branch
 pnpm add defered-branch
 ```
 
-## 🌟 When to Use Which?
+## 🌟 API Overview
 
-### `deferedBranch` - Single-Match Immediate Execution 🏃‍♂️
+### `deferedBranch` - Single-Match Immediate 🏃‍♂️
 
-Perfect for scenarios where you need to evaluate conditions **once** and execute **the first match** immediately:
+Evaluate conditions once, execute first match immediately.
 
-- One-time conditional flows with single outcome
-- Static condition evaluation where only one branch should run
+**Use cases:** One-time conditional flows, static condition evaluation
 
-### `deferedBranchDynamic` - Single-Match Reusable Logic 🔄
+### `deferedBranchDynamic` - Single-Match Reusable 🔄
 
-Ideal when you need to **reuse** the same branching logic multiple times with different inputs, executing **only the first match**:
+Reusable branching logic, execute first match dynamically.
 
-- Event handlers with varying states
-- Repeated conditional logic with dynamic data where only one action is needed
+**Use cases:** Event handlers with varying states, repeated conditional logic
 
-### `deferedBranchAll` - Multi-Match Immediate Execution 🎯
+### `deferedBranchAll` - Multi-Match Immediate 🎯
 
-Perfect for scenarios where you need to evaluate conditions **once** and execute **all matching branches** immediately:
+Evaluate conditions once, execute all matches immediately.
 
-- Notification systems where multiple handlers should trigger
-- Validation systems where all applicable rules should run
-- Event handling where multiple listeners should respond
+**Use cases:** Notification systems, validation rules, multiple event listeners
 
-### `deferedBranchAllDynamic` - Multi-Match Reusable Logic 🌊
+### `deferedBranchAllDynamic` - Multi-Match Reusable 🌊
 
-Ideal when you need to **reuse** branching logic that executes **all matching branches** with dynamic conditions:
+Reusable branching logic, execute all matches dynamically.
 
-- Plugin systems where multiple plugins may handle the same event
-- Middleware chains where multiple handlers should process the same request
-- Observer patterns where multiple observers need to react to state changes
+**Use cases:** Plugin systems, middleware chains, observer patterns
 
 ## 📚 Usage Examples
 
-### Basic deferedBranch Usage
-
-```typescript
-import { deferedBranch } from 'defered-branch';
-
-// Steps to use:
-// 1. Create instance
-const branch = deferedBranch();
-
-// 2. Add conditional branches
-branch
-  .add(user.role === 'admin', () => 'Access granted to admin panel')
-  .add(user.role === 'user', () => 'Access granted to user dashboard')
-  .add(user.role === 'guest', () => 'Limited access granted');
-
-// 3. Handle no-match case (optional)
-branch.nomatch(() => 'Access denied');
-
-// some other logic... like validate other arguments
-
-// 4. Execute and get result
-const result = branch.run();
-console.log(result); // Output based on user.role
-```
-
-### Advanced deferedBranch with Parameters
+### Basic `deferedBranch`
 
 ```typescript
 const calculator = deferedBranch<(a: number, b: number) => number>();
@@ -97,7 +64,7 @@ calculator
 const result = calculator.run(10, 5); // Returns calculated result
 ```
 
-### deferedBranchDynamic for Reusable Logic
+### Reusable Logic with `deferedBranchDynamic`
 
 ```typescript
 import { deferedBranchDynamic } from 'defered-branch';
@@ -141,7 +108,9 @@ _Same as deferedBranch_
 
 _Same as deferedBranchDynamic_
 
-### Real-world Example: Theme Switching
+### Real-world Example
+
+#### Theme Switching
 
 ```typescript
 const themeHandler = deferedBranchDynamic<() => void>();
@@ -176,6 +145,41 @@ function onConfigChange() {
   themeHandler.run();
   xxxHandler.run();
   yyyHandler.run();
+}
+```
+
+#### `h` function
+
+[This is a simplied example from package **KT.js**](https://www.npmjs.com/package/kt.js)
+
+In this section, we can see that element creation separates judgement and dealing of `attr` and `content`. With out this package, we should judge 2 times and the code would be too long for one .ts file.
+
+```typescript
+const attrBranch = deferedBranchDynamic<BranchFn, NoMatchFn, PredicateFn>()
+  .add((_, attr) => typeof attr === 'string', attrIsString)
+  .add((_, attr) => typeof attr === 'object' && attr !== null, attrIsObject)
+  .nomatch(invalidAttrHandler);
+const contentBranch = __Same_As_AttrBranch__;
+
+function h<T extends HTMLTag>(
+  tag: T,
+  attr: RawAttribute = '',
+  content: RawContent = ''
+): HTMLElement<T> {
+  if (typeof tag !== 'string') {
+    throw new TypeError('[__NAME__:h] tagName must be a string.');
+  }
+  attrBranch.predicate(null, attr);
+  contentBranch.predicate(null, content);
+
+  // create element
+  const el = document.createElement(tag) as HTMLElement<T>;
+  // ... some element enhancement logic ...
+
+  attrBranch.run(element, attr);
+  contentBranch.run(element, content);
+
+  // ... other logic ...
 }
 ```
 
@@ -305,6 +309,10 @@ MIT License - see [LICENSE](LICENSE) file for details.
 ## 🤝 Contributing
 
 Contributions are welcome! Please feel free to submit issues and pull requests.
+
+## 🦋 Trivia
+
+[**KT.js**](https://www.npmjs.com/package/kt.js) is the reason of this package's birth. It uses `deferedBranchDynamic` internally to handle attribute and content processing in a clean, reusable way.
 
 ---
 
