@@ -17,6 +17,8 @@ For more awesome packages, check out [my homepage💛](https://baendlorel.github
 
 ## Features
 
+<a id="features"></a>
+
 - 🎯 **Four Execution Patterns**: Single/all-match × immediate/dynamic logic
 - 🔒 **Type Safe**: Full TypeScript support with type inference
 - 🪶 **Lightweight**: Zero dependencies, minimal footprint
@@ -24,6 +26,8 @@ For more awesome packages, check out [my homepage💛](https://baendlorel.github
 - 📦 **Generic**: Customizable branch, condition, and nomatch handler types
 
 ## Change Log
+
+<a id="change-log"></a>
 
 - 2.2.1-2.2.3
   - Fix: Clear matched branch after execution to prevent stale state issues.
@@ -35,6 +39,8 @@ For more awesome packages, check out [my homepage💛](https://baendlorel.github
 
 ## Installation
 
+<a id="installation"></a>
+
 ```bash
 npm install defered-branch
 # or
@@ -42,6 +48,8 @@ pnpm add defered-branch
 ```
 
 ## Overview
+
+<a id="overview"></a>
 
 ### `deferedBranch` - Single-Match Immediate 🏃‍♂️
 
@@ -68,6 +76,8 @@ Reusable branching logic, execute all matches dynamically.
 **Use cases:** Plugin systems, middleware chains, observer patterns
 
 ## Usage Examples
+
+<a id="usage-examples"></a>
 
 ### Basic `deferedBranch`
 
@@ -206,6 +216,8 @@ function h<T extends HTMLTag>(
 
 ## API Reference
 
+<a id="api-reference"></a>
+
 ### deferedBranch()
 
 Creates a new deferred branch instance for immediate execution scenarios.
@@ -268,6 +280,8 @@ _Same as deferedBranchDynamic_
 
 ## Type Annotation
 
+<a id="type-annotation"></a>
+
 The factory functions `deferedBranch`, `deferedBranchDynamic`, `deferedBranchAll`, and `deferedBranchAllDynamic` are generic helpers. You can provide explicit type parameters to describe the branch function signature and the optional `nomatch` handler.
 
 Below is an example using `deferedBranch`:
@@ -325,13 +339,19 @@ const result = calc.run(2, 3); // typed as number | undefined
 
 ## License
 
+<a id="license"></a>
+
 MIT License - see [LICENSE](LICENSE) file for details.
 
 ## Contributing
 
+<a id="contributing"></a>
+
 Contributions are welcome! Please feel free to submit issues and pull requests.
 
 ## Trivia
+
+<a id="trivia"></a>
 
 [**KT.js**](https://www.npmjs.com/package/kt.js) is the reason of this package's birth. It uses `deferedBranchDynamic` internally to handle attribute and content processing in a clean, reusable way.
 
