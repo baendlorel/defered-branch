@@ -1,7 +1,7 @@
-import { DeferedBranch } from './defer-branch.js';
-import { DeferedBranchDynamic } from './defer-branch-dynamic.js';
-import { DeferedBranchAllDynamic } from './defer-branch-all-dynamic.js';
-import { DeferedBranchAll } from './defer-branch-all.js';
+import { DeferedBranch } from './defered-branch/default.js';
+import { DeferedBranchDynamic } from './defered-branch/dynamic.js';
+import { DeferedBranchAllDynamic } from './defered-branch/all-dynamic.js';
+import { DeferedBranchAll } from './defered-branch/all.js';
 
 /**
  * ## Steps to use
